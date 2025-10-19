@@ -18,8 +18,12 @@ export default function SignUpPage() {
     try {
       await register({ email, password });
       router.push("/profile");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Registration failed");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Registration failed");
+      }
     }
   };
 
