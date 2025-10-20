@@ -7,7 +7,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    router.refresh(); // обновляем данные при монтировании
+    router.refresh();
   }, [router]);
 
   return <>{children}</>;
