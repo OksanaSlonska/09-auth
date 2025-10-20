@@ -1,24 +1,14 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/store/authStore";
-import Loader from "@/components/Loader/Loader";
+import { getMe } from "@/lib/api/serverApi";
 import Image from "next/image";
 import Link from "next/link";
 import css from "./ProfilePage.module.css";
 
-export default function ProfilePage() {
-  const { user, isAuthenticated } = useAuthStore();
-  const router = useRouter();
+export default async function ProfilePage() {
+  const user = await getMe();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/sign-in");
-    }
-  }, [isAuthenticated, router]);
-
-  if (!user) return <Loader />;
+  if (!user) {
+    return <p>User not authorized</p>;
+  }
 
   return (
     <main className={css.mainContent}>

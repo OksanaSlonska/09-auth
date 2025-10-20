@@ -1,5 +1,5 @@
 import NotePreviewModal from "@/components/NotePreview/NotePreview";
-import { fetchNoteById } from "@/lib/api/clientApi";
+import { fetchNoteById } from "@/lib/api/serverApi";
 import {
   QueryClient,
   dehydrate,

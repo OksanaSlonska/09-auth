@@ -60,7 +60,7 @@ export const checkSession = async () => {
 };
 
 export const getMe = async () => {
-  const res = await api.get("/users/me");
+  const res = await api.get("/users/me"); // <- без /api
   return res.data as User;
 };
 

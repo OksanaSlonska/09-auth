@@ -7,7 +7,7 @@ export const fetchNotes = async (params?: {
   page?: number;
   tag?: string;
 }) => {
-  const cookieHeader = cookies().toString();
+  const cookieHeader = (await cookies()).toString();
 
   const res = await api.get("/notes", {
     params,
@@ -18,7 +18,7 @@ export const fetchNotes = async (params?: {
 };
 
 export const fetchNoteById = async (id: string) => {
-  const cookieHeader = cookies().toString();
+  const cookieHeader = (await cookies()).toString();
 
   const res = await api.get(`/notes/${id}`, {
     headers: { Cookie: cookieHeader },
@@ -28,7 +28,7 @@ export const fetchNoteById = async (id: string) => {
 };
 
 export const getMe = async () => {
-  const cookieHeader = cookies().toString();
+  const cookieHeader = (await cookies()).toString();
 
   const res = await api.get("/users/me", {
     headers: { Cookie: cookieHeader },
@@ -38,11 +38,14 @@ export const getMe = async () => {
 };
 
 export const checkSession = async () => {
-  const cookieHeader = cookies().toString();
+  const cookieHeader = (await cookies()).toString();
 
-  const res = await api.get("/auth/session", {
-    headers: { Cookie: cookieHeader },
-  });
-
-  return res.data as User | null;
+  try {
+    await api.get("/auth/session", {
+      headers: { Cookie: cookieHeader },
+    });
+    return true;
+  } catch {
+    return false;
+  }
 };
