@@ -29,11 +29,9 @@ export const fetchNoteById = async (id: string) => {
 
 export const getMe = async () => {
   const cookieHeader = (await cookies()).toString();
-
   const res = await api.get("/users/me", {
     headers: { Cookie: cookieHeader },
   });
-
   return res.data as User;
 };
 

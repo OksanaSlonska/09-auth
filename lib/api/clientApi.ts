@@ -59,9 +59,40 @@ export const checkSession = async () => {
   return res.data as User | null;
 };
 
-export const getMe = async () => {
-  const res = await api.get("/users/me"); // <- без /api
-  return res.data as User;
+// export const getMe = async () => {
+//   const res = await api.get("/users/me"); // <- без /api
+//   return res.data as User;
+// };
+
+// export const getMe = async (): Promise<User> => {
+//   const res = await fetch("/api/users/me", {
+//     credentials: "include", // <- обязательно, чтобы отправить cookie
+//   });
+
+//   if (!res.ok) {
+//     throw new Error("Unauthorized");
+//   }
+
+//   return res.json();
+// };
+
+export const getMe = async (): Promise<User> => {
+  const accessToken = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("accessToken="))
+    ?.split("=")[1];
+
+  const res = await fetch("/api/users/me", {
+    headers: {
+      Cookie: `accessToken=${accessToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Unauthorized");
+  }
+
+  return res.json();
 };
 
 export const updateMe = async (data: { username: string }) => {
