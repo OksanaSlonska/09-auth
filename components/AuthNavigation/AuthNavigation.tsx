@@ -5,19 +5,34 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store/authStore";
 import css from "./AuthNavigation.module.css";
 
+import { logout } from "@/lib/api/clientApi";
+
 export default function AuthNavigation() {
-  const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
+  // const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
+  // const router = useRouter();
+
+  // const handleLogout = async () => {
+  //   try {
+  //     await fetch("/api/auth/logout", { method: "POST" });
+  //     clearIsAuthenticated();
+  //     router.push("/");
+  //   } catch (error) {
+  //     console.error("Logout failed", error);
+  //   }
+  // };
   const router = useRouter();
 
+  const { isAuthenticated, user } = useAuthStore();
+  const clearIsAuthenticated = useAuthStore(
+    (state) => state.clearIsAuthenticated
+  );
+
   const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      clearIsAuthenticated();
-      router.push("/sign-in");
-    } catch (error) {
-      console.error("Logout failed", error);
-    }
+    await logout();
+    clearIsAuthenticated();
+    router.push("/sign-in");
   };
+
   return (
     <ul className={css.authNav}>
       {isAuthenticated ? (

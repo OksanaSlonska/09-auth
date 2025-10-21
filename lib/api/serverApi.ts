@@ -36,14 +36,12 @@ export const getMe = async () => {
 };
 
 export const checkSession = async () => {
-  const cookieHeader = (await cookies()).toString();
+  const cookieStore = await cookies();
+  const res = await api.get("/auth/session", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
 
-  try {
-    await api.get("/auth/session", {
-      headers: { Cookie: cookieHeader },
-    });
-    return true;
-  } catch {
-    return false;
-  }
+  return res;
 };

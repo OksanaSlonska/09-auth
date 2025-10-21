@@ -49,33 +49,22 @@ export const login = async (data: { email: string; password: string }) => {
   return res.data as User;
 };
 
-export const logout = async () => {
-  const res = await api.post("/auth/logout");
+export const logout = async (): Promise<void> => {
+  await api.post("/auth/logout");
+};
+
+interface CheckSessionRequest {
+  success: boolean;
+}
+
+export async function checkSession() {
+  const res = await api.get<CheckSessionRequest>("/auth/session");
+  return res.data.success;
+}
+
+export const getMe = async () => {
+  const res = await api.get<User>("/users/me");
   return res.data;
-};
-
-export const checkSession = async () => {
-  const res = await api.get("/auth/session");
-  return res.data as User | null;
-};
-
-export const getMe = async (): Promise<User> => {
-  const accessToken = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("accessToken="))
-    ?.split("=")[1];
-
-  const res = await fetch("/api/users/me", {
-    headers: {
-      Cookie: `accessToken=${accessToken}`,
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error("Unauthorized");
-  }
-
-  return res.json();
 };
 
 export const updateMe = async (data: { username: string }) => {
